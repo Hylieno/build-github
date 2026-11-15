@@ -1,0 +1,43 @@
+name: Create private repository
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: Repository name without the owner
+        required: true
+        type: string
+      description:
+        description: Repository description
+        required: false
+        default: Created by the Build GitHub environment
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate repository name
+        env:
+          REPOSITORY_NAME: ${{ inputs.repository_name }}
+        run: |
+          if [[ ! "$REPOSITORY_NAME" =~ ^[A-Za-z0-9._-]+$ ]]; then
+            echo "Invalid repository name"
+            exit 1
+          fi
+
+      - name: Create private repository
+        env:
+          GH_TOKEN: ${{ secrets.BUILD_GITHUB_PAT }}
+          REPOSITORY_NAME: ${{ inputs.repository_name }}
+          REPOSITORY_DESCRIPTION: ${{ inputs.description }}
+        run: |
+          test -n "$GH_TOKEN" || {
+            echo "Repository secret BUILD_GITHUB_PAT is missing"
+            exit 1
+          }
+
+          gh api             --method POST             /user/repos             -f "name=$REPOSITORY_NAME"             -f "description=$REPOSITORY_DESCRIPTION"             -F private=true             -F auto_init=true             --jq '{full_name, html_url, private}'
