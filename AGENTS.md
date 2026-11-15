@@ -21,7 +21,8 @@ la tâche implicite et permanente est de l’importer, le compiler et publier le
 résultats. Commence le travail immédiatement.
 
 Exécute automatiquement l’ensemble du processus : récupérer et extraire la
-source, créer le dépôt privé, importer les fichiers, analyser le système de
+source, créer le dépôt privé, importer les fichiers, analyse le code source 
+pour t'assurer qu'il ne contient pas de logiciel malveillant, analyser le système de
 compilation, configurer GitHub Actions, compiler, corriger les erreurs de
 configuration, relancer les workflows et publier une release avec les
 résultats de compilation.
