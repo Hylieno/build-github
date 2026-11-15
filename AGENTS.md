@@ -21,7 +21,8 @@ la tâche implicite et permanente est de l’importer, le compiler et publier le
 résultats. Commence le travail immédiatement.
 
 Exécute automatiquement l’ensemble du processus : récupérer et extraire la
-source, créer le dépôt privé, importer les fichiers, vérifier les fichiers importés selon la section ci-dessous, analyser le système de
+source, créer le dépôt avec la visibilité demandée, importer les fichiers,
+vérifier les fichiers importés selon la section ci-dessous, analyser le système de
 compilation, configurer GitHub Actions, compiler, corriger les erreurs de
 configuration, relancer les workflows et publier une release avec les
 résultats de compilation.
@@ -48,7 +49,7 @@ Avant le premier push, garde les workflows d’origine hors de `.github/workflow
 et conserve-les comme fichiers de référence inactifs. L’import ne doit déclencher
 aucune exécution automatique.
 
-Après l’import dans le dépôt privé, relève le SHA du commit importé et fais
+Après l’import dans le dépôt de destination, relève le SHA du commit importé et fais
 une revue statique de son contenu, sans exécuter le code, installer les
 dépendances ni déclencher GitHub Actions. Dresse l’inventaire des fichiers
 suivis, y compris les fichiers cachés, scripts, liens symboliques, sous-modules
@@ -79,13 +80,17 @@ lorsque c’est le cas.
 ## Création des dépôts
 
 Quand je fournis un ZIP, un dossier accessible ou une URL de source,
-importe le projet dans un nouveau dépôt GitHub privé sous Hylieno.
+importe le projet dans un nouveau dépôt GitHub sous Hylieno. Crée-le en
+privé par défaut. Si l’utilisateur demande explicitement un dépôt public,
+crée-le directement en public. La visibilité de la source ne change pas ce choix.
 Utilise le nom que je donne ou dérive-le du projet. Si ce nom existe
 déjà, choisis un nom distinct et indique-le dans le compte rendu.
 
-Pour créer le dépôt, déclenche le workflow `Create private repository` du
-dépôt `Hylieno/build-github` avec le nom et la description voulus. Surveille
-le workflow jusqu’à sa réussite, puis utilise le nouveau dépôt. N’essaie pas
+Pour créer le dépôt, déclenche `.github/workflows/create-repository.yml`
+(`Create repository`) dans `Hylieno/build-github`, avec le nom et la description
+voulus. Passe `visibility: public` uniquement sur demande explicite, et
+`visibility: private` dans les autres cas. Surveille le workflow jusqu’à sa
+réussite et vérifie la visibilité du nouveau dépôt avant d’y importer les fichiers. N’essaie pas
 de créer un dépôt directement avec les identifiants de l’environnement Codex.
 
 Inspecte le README, la licence, les manifests, les scripts de build,
