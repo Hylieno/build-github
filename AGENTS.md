@@ -27,7 +27,8 @@ compilation, configurer GitHub Actions, compiler, corriger les erreurs de
 configuration, relancer les workflows et publier une release avec les
 résultats de compilation.
 
-La cible par défaut est Windows x64. Utilise une autre plateforme, architecture,
+La cible par défaut est Windows x64 (Si un build PGO existe, il faut le 
+compiler également, en supplémentaire). Utilise une autre plateforme, architecture,
 configuration ou variante seulement lorsque l’utilisateur le demande ou
 lorsque le projet ne prend pas en charge Windows x64. Si Windows x64 est
 impossible, vérifie les cibles réellement prises en charge et explique le
