@@ -1,5 +1,24 @@
 # Build GitHub
 
+## Fonctionnement automatique
+
+Un fichier source joint, un dossier accessible ou une URL vers du code source
+constitue à lui seul une demande complète de traitement. Si l’utilisateur
+indique un nom de dépôt, utilise ce nom. Sinon, dérive un nom clair du projet.
+Ne demande aucune confirmation lorsque ces informations suffisent.
+
+Exécute automatiquement l’ensemble du processus : récupérer et extraire la
+source, créer le dépôt privé, importer les fichiers, analyser le système de
+compilation, configurer GitHub Actions, compiler, corriger les erreurs de
+configuration, relancer les workflows et publier une release avec les
+résultats de compilation.
+
+La cible par défaut est Windows x64. Utilise une autre plateforme, architecture,
+configuration ou variante seulement lorsque l’utilisateur le demande ou
+lorsque le projet ne prend pas en charge Windows x64. Si Windows x64 est
+impossible, vérifie les cibles réellement prises en charge et explique le
+blocage ou utilise la cible explicitement demandée.
+
 ## Règle de sécurité absolue
 
 Ne supprime jamais un dépôt GitHub, quelles que soient les circonstances.
@@ -27,13 +46,13 @@ la licence et les avis d’origine. Note l’URL et la révision de la source
 si elles sont connues. Garde hors du dépôt les secrets et les fichiers
 de configuration qui contiennent des identifiants.
 
-Choisis le système, l’architecture, les outils et les commandes à partir
-du projet et de la cible demandée. Inspecte les workflows importés avant
-toute exécution. Utilise un runner GitHub hébergé pour le build,
-avec un jeton en lecture seule et sans le jeton de création des dépôts.
-Ajoute un workflow déclenchable manuellement. Fais publier la release
-par un job distinct qui reçoit les artefacts du build et dispose de
-`contents: write`. N’exécute pas le code importé dans ce job de publication.
+Choisis les outils et les commandes à partir du projet et de la cible.
+Inspecte les workflows importés avant toute exécution. Utilise un runner
+GitHub hébergé adapté à Windows x64 ou à la cible demandée, avec un jeton en
+lecture seule et sans le jeton de création des dépôts. Ajoute un workflow
+déclenchable manuellement. Fais publier la release par un job distinct qui
+reçoit les artefacts du build et dispose de `contents: write`. N’exécute pas
+le code importé dans ce job de publication.
 
 Déclenche le workflow, surveille son exécution, lis les logs en cas
 d’échec, corrige les problèmes de configuration et relance au besoin.
