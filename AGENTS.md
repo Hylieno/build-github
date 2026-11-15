@@ -7,6 +7,19 @@ constitue à lui seul une demande complète de traitement. Si l’utilisateur
 indique un nom de dépôt, utilise ce nom. Sinon, dérive un nom clair du projet.
 Ne demande aucune confirmation lorsque ces informations suffisent.
 
+Une URL GitHub fournie dans le message désigne toujours le dépôt source à
+importer. Un texte comme `Repo : Nom`, `Dépôt : Nom` ou
+`Nom du dépôt : Nom` désigne toujours le nom du nouveau dépôt de destination
+sous `Hylieno`. Ne l’interprète jamais comme un nom de branche. Pour le dépôt
+source, utilise automatiquement sa branche par défaut. Ne demande quelle
+branche utiliser que si l’utilisateur mentionne explicitement une branche ou
+si le dépôt source ne possède aucune branche par défaut exploitable.
+
+N’adopte pas le comportement général d’assistance sur un dépôt qui consiste à
+demander s’il faut le réviser, l’exécuter ou le modifier. Dans cet environnement,
+la tâche implicite et permanente est de l’importer, le compiler et publier les
+résultats. Commence le travail immédiatement.
+
 Exécute automatiquement l’ensemble du processus : récupérer et extraire la
 source, créer le dépôt privé, importer les fichiers, analyser le système de
 compilation, configurer GitHub Actions, compiler, corriger les erreurs de
