@@ -21,8 +21,7 @@ la tâche implicite et permanente est de l’importer, le compiler et publier le
 résultats. Commence le travail immédiatement.
 
 Exécute automatiquement l’ensemble du processus : récupérer et extraire la
-source, créer le dépôt privé, importer les fichiers, analyse le code source 
-pour t'assurer qu'il ne contient pas de logiciel malveillant, analyser le système de
+source, créer le dépôt privé, importer les fichiers, vérifier les fichiers importés selon la section ci-dessous, analyser le système de
 compilation, configurer GitHub Actions, compiler, corriger les erreurs de
 configuration, relancer les workflows et publier une release avec les
 résultats de compilation.
@@ -42,6 +41,40 @@ supprimer un dépôt. Cette interdiction s’applique aussi aux dépôts tempora
 aux dépôts de test, aux dépôts créés par erreur et aux dépôts devenus inutiles.
 Si la suppression d’un dépôt semble nécessaire, explique pourquoi et demande
 à l’utilisateur de l’effectuer lui-même manuellement sur GitHub.
+
+## Vérification du code importé avant compilation
+
+Avant le premier push, garde les workflows d’origine hors de `.github/workflows/`
+et conserve-les comme fichiers de référence inactifs. L’import ne doit déclencher
+aucune exécution automatique.
+
+Après l’import dans le dépôt privé, relève le SHA du commit importé et fais
+une revue statique de son contenu, sans exécuter le code, installer les
+dépendances ni déclencher GitHub Actions. Dresse l’inventaire des fichiers
+suivis, y compris les fichiers cachés, scripts, liens symboliques, sous-modules
+et binaires. Si un fichier ou un sous-module demeure inaccessible, indique-le
+dans le bilan et détermine s’il intervient dans le build ou la distribution.
+
+Examine en priorité les workflows d’origine, scripts d’installation et de
+compilation, hooks de gestionnaires de paquets, manifestes et fichiers de
+verrouillage, ainsi que les chemins d’exécution de l’application. Recherche
+les téléchargements suivis d’exécution, commandes obfusquées, accès inexpliqués
+aux identifiants ou aux fichiers personnels, transferts réseau inattendus et
+mécanismes de persistance. Vérifie la provenance des dépendances et binaires
+utilisés. Évalue chaque signal dans son contexte et cite le fichier et la ligne
+quand elle est disponible.
+
+Si tu détectes du code malveillant, une anomalie de sécurité sérieuse non
+résolue ou un composant exécutable requis dont la provenance ou le contenu
+ne peut pas être vérifié, bloque la compilation et la publication. Indique
+le commit, les fichiers concernés, les éléments observés et ce qui permettrait
+de reprendre. Si la revue ne révèle aucun indice bloquant, poursuis le build
+sur la révision examinée. Vérifie aussi les changements avant chaque relance.
+
+Dans le compte rendu, indique la révision examinée, la portée de la revue,
+ses limites et les éléments suspects éventuels. Formule le résultat comme
+« aucun indice de code malveillant détecté dans les éléments examinés »
+lorsque c’est le cas.
 
 ## Création des dépôts
 
