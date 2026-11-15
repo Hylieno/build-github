@@ -1,5 +1,14 @@
 # Build GitHub
 
+## Règle de sécurité absolue
+
+Ne supprime jamais un dépôt GitHub, quelles que soient les circonstances.
+N’utilise aucune commande, API, interface ou automatisation capable de
+supprimer un dépôt. Cette interdiction s’applique aussi aux dépôts temporaires,
+aux dépôts de test, aux dépôts créés par erreur et aux dépôts devenus inutiles.
+Si la suppression d’un dépôt semble nécessaire, explique pourquoi et demande
+à l’utilisateur de l’effectuer lui-même manuellement sur GitHub.
+
 Quand je fournis un ZIP, un dossier accessible ou une URL de source,
 importe le projet dans un nouveau dépôt GitHub privé sous Hylieno.
 Utilise le nom que je donne ou dérive-le du projet. Si ce nom existe
