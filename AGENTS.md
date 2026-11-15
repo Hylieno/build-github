@@ -9,10 +9,17 @@ aux dépôts de test, aux dépôts créés par erreur et aux dépôts devenus in
 Si la suppression d’un dépôt semble nécessaire, explique pourquoi et demande
 à l’utilisateur de l’effectuer lui-même manuellement sur GitHub.
 
+## Création des dépôts
+
 Quand je fournis un ZIP, un dossier accessible ou une URL de source,
 importe le projet dans un nouveau dépôt GitHub privé sous Hylieno.
 Utilise le nom que je donne ou dérive-le du projet. Si ce nom existe
 déjà, choisis un nom distinct et indique-le dans le compte rendu.
+
+Pour créer le dépôt, déclenche le workflow `Create private repository` du
+dépôt `Hylieno/build-github` avec le nom et la description voulus. Surveille
+le workflow jusqu’à sa réussite, puis utilise le nouveau dépôt. N’essaie pas
+de créer un dépôt directement avec les identifiants de l’environnement Codex.
 
 Inspecte le README, la licence, les manifests, les scripts de build,
 les workflows d’origine, les sous-modules et les dépendances. Préserve
