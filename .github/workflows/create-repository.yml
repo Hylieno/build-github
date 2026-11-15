@@ -1,4 +1,4 @@
-name: Create private repository
+name: Create repository
 
 on:
   workflow_dispatch:
@@ -7,6 +7,14 @@ on:
         description: Repository name without the owner
         required: true
         type: string
+      visibility:
+        description: Repository visibility
+        required: false
+        default: private
+        type: choice
+        options:
+          - private
+          - public
       description:
         description: Repository description
         required: false
@@ -29,15 +37,29 @@ jobs:
             exit 1
           fi
 
-      - name: Create private repository
+      - name: Create repository
         env:
           GH_TOKEN: ${{ secrets.BUILD_GITHUB_PAT }}
           REPOSITORY_NAME: ${{ inputs.repository_name }}
           REPOSITORY_DESCRIPTION: ${{ inputs.description }}
+          REPOSITORY_VISIBILITY: ${{ inputs.visibility || 'private' }}
         run: |
           test -n "$GH_TOKEN" || {
             echo "Repository secret BUILD_GITHUB_PAT is missing"
             exit 1
           }
 
-          gh api             --method POST             /user/repos             -f "name=$REPOSITORY_NAME"             -f "description=$REPOSITORY_DESCRIPTION"             -F private=true             -F auto_init=true             --jq '{full_name, html_url, private}'
+          case "$REPOSITORY_VISIBILITY" in
+            private) is_private=true ;;
+            public) is_private=false ;;
+            *) echo "Invalid repository visibility"; exit 1 ;;
+          esac
+
+          gh api \
+            --method POST \
+            /user/repos \
+            -f "name=$REPOSITORY_NAME" \
+            -f "description=$REPOSITORY_DESCRIPTION" \
+            -F "private=$is_private" \
+            -F auto_init=true \
+            --jq '{full_name, html_url, private}'
