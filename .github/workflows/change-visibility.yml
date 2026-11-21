@@ -1,0 +1,54 @@
+name: Change repository visibility
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: Repository name under Hylieno
+        required: true
+        type: string
+      visibility:
+        description: Desired repository visibility
+        required: true
+        type: choice
+        options:
+          - private
+          - public
+
+permissions: {}
+
+jobs:
+  change-visibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set and verify repository visibility
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.BUILD_GITHUB_PAT }}
+          REPOSITORY_NAME: ${{ inputs.repository_name }}
+          VISIBILITY: ${{ inputs.visibility }}
+        run: |
+          if [[ ! "$REPOSITORY_NAME" =~ ^[A-Za-z0-9._-]+$ || "$REPOSITORY_NAME" == "." || "$REPOSITORY_NAME" == ".." ]]; then
+            echo "Invalid repository name"
+            exit 1
+          fi
+          case "$VISIBILITY" in
+            private|public) ;;
+            *) echo "Invalid visibility"; exit 1 ;;
+          esac
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo "Repository secret BUILD_GITHUB_PAT is missing"
+            exit 1
+          fi
+
+          endpoint="repos/Hylieno/$REPOSITORY_NAME"
+          current=$(gh api "$endpoint" --jq .visibility)
+          if [[ "$current" != "$VISIBILITY" ]]; then
+            gh api --method PATCH "$endpoint" -f "visibility=$VISIBILITY" --silent
+          fi
+          actual=$(gh api "$endpoint" --jq .visibility)
+          if [[ "$actual" != "$VISIBILITY" ]]; then
+            echo "Expected $VISIBILITY, got $actual"
+            exit 1
+          fi
+          echo "Verified Hylieno/$REPOSITORY_NAME is $actual"
